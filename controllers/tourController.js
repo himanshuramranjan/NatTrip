@@ -18,8 +18,27 @@ exports.getAllTours = async (req, res) => {
     }
 }
 
+exports.getTour = async (req, res) => {
+    try {
+        const tour = await Tour.find(req.params.id);
+
+        return res.status(200).json({
+            status: 'success',
+            data: {
+                tour
+            }
+        });
+    } catch(err) {
+        return res.status(401).json({
+            status: 'fail',
+            message: err.message
+        });
+    }
+}
+
 exports.createTour = async (req, res) => {
     try {
+        console.log('Inside the create method');
         const tour = await Tour.create(req.body);
 
         return res.status(200).json({
