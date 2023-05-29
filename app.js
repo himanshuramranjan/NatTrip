@@ -1,12 +1,10 @@
 const express = require('express');
 
+const tourRouter = require('./routes/tourRoutes');
+
 // Initialize the app
 const app = express();
 
-app.use('/', (req, res) => {
-    return res.json({
-    data: 'Hello Check'
-})
-});
+app.use('/api/v1/nattrip', tourRouter);
 
 module.exports = app;
