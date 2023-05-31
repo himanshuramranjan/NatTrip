@@ -1,6 +1,8 @@
 const express = require('express');
 
 const tourRouter = require('./routes/tourRoutes');
+const globalErrorHandler = require('./controllers/errorController');
+const AppError = require('./utils/AppError');
 
 // Initialize the app
 const app = express();
@@ -10,5 +12,13 @@ app.use(express.json({ limit: '10kb' }));
 
 // Routes
 app.use('/api/v1/tours', tourRouter);
+
+// Handle any undefined routes
+app.all('*', (req, res, next) => {
+    next(new AppError(`The ${req.originalUrl} is not defined`, 404));
+})
+
+// Global Error Handler
+app.use(globalErrorHandler);
 
 module.exports = app;
