@@ -74,7 +74,7 @@ tourSchema.virtual('durationWeeks').get(function() {
 tourSchema.pre(/^find/, function(next) {
     this.find({ privateTour: { $ne: true }});
     next();
-})
+});
 
 const Tour = mongoose.model('Tour', tourSchema);
 
