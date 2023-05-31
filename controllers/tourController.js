@@ -4,7 +4,7 @@ const AppFeatures = require('../utils/AppFeatures');
 exports.getTopCheapTours = (req, res, next) =>{
 
     req.query.sort = '-ratingsAverage,price';
-    req.query.fields = 'name,price,ratingsAverage,difficulty';
+    req.query.fields = 'name,price,duration,ratingsAverage,difficulty';
     req.query.limit = '5';
     next();
 }
