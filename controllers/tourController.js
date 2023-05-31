@@ -1,6 +1,7 @@
 const Tour = require('../models/tourModel');
 const AppFeatures = require('../utils/AppFeatures');
 
+// Get top cheap tours
 exports.getTopCheapTours = (req, res, next) =>{
 
     req.query.sort = '-ratingsAverage,price';
@@ -8,6 +9,7 @@ exports.getTopCheapTours = (req, res, next) =>{
     req.query.limit = '5';
     next();
 }
+
 exports.getAllTours = async (req, res) => {
     try {
         
@@ -105,4 +107,34 @@ exports.deleteTour = async (req, res) => {
             message: err.message
         });
     }
+}
+
+exports.getTourStats = async (req, res) => {
+
+    const stats = await Tour.aggregate([
+        {
+            $match: { privateTour: { $ne: true } }
+        },
+        {
+            $group: {
+                _id: '$difficulty',
+                numTours: { $sum: 1},
+                numRatings: { $sum: '$ratingsQuantity'},
+                avgRating: { $avg: '$ratingsAverage'},
+                avgPrice: { $avg: '$price'},
+                minPrice: { $min: '$price'},
+                maxPrice: { $max: '$price'}
+            }
+        },
+        {
+            $sort: { avgRating: 1 }
+        }
+    ]);
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            stats
+        }
+    });
 }
