@@ -12,7 +12,11 @@ router
 
 router
     .route('/tours-stats')
-    .get(tourController.getTourStats);
+    .get(tourController.getTourStats); 
+
+router
+    .route('/monthly-tour-plans/:year')
+    .get(tourController.getMonthlyTourPlans);
 
 router
     .route('/')

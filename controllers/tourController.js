@@ -109,8 +109,10 @@ exports.deleteTour = async (req, res) => {
     }
 }
 
+// Get tour stats based on difficulty
 exports.getTourStats = async (req, res) => {
 
+    // aggregate pipeline to get the tour stats
     const stats = await Tour.aggregate([
         {
             $match: { privateTour: { $ne: true } }
@@ -135,6 +137,52 @@ exports.getTourStats = async (req, res) => {
         status: 'success',
         data: {
             stats
+        }
+    });
+}
+
+// Get monthly tour plans
+exports.getMonthlyTourPlans = async (req, res) => {
+
+    const year = req.params.year * 1;
+
+    // aggregate pipeline to get the monthly plans
+    const plans = await Tour.aggregate([
+        {
+            $unwind: '$startDates'
+        },
+        {
+            $match: {
+                startDates: {
+                    $gte: new Date(`${year}-01-01`),
+                    $lte: new Date(`${year}-12-31`)
+                }
+            }
+        },
+        {
+            $group: {
+                _id: { $month: '$startDates'},
+                numTours: { $sum: 1},
+                tours: { $push: '$name'}
+            }
+        },
+        {
+            $addFields: { month: '$_id'}
+        },
+        {
+            $sort: { numTours: -1 }
+        },
+        {
+            $project: {
+                _id: 0
+            }
+        }
+    ]);
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            plans
         }
     });
 }
