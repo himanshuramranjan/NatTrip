@@ -59,6 +59,8 @@ const tourSchema = new mongoose.Schema({
 
 // virutal field to show duration of tour in weeks
 tourSchema.virtual('durationWeeks').get(function() {
+    
+    if(!this.duration) return;
 
     let durationInWeeks = (this.duration / 7) * 100;
     return Math.round(durationInWeeks) / 100;
