@@ -30,7 +30,7 @@ class AppFeatures {
 
         // if sort params present then format the query for mongoose and sort
         if(this.queryString.sort) {
-            const sortBy = this.queryString.sort.replace(',', ' ');
+            const sortBy = this.queryString.sort.split(',').join(' ');
             this.query = this.query.sort(sortBy);
         }
 
@@ -47,7 +47,7 @@ class AppFeatures {
 
         // if limit fields present then format query for mongoose and hide
         if(this.queryString.fields) {
-            const displayFields = this.queryString.fields.replace(',', ' ');
+            const displayFields = this.queryString.fields.split(',').join(' ');
             this.query = this.query.select(displayFields);
         }
 

@@ -1,8 +1,16 @@
 const Tour = require('../models/tourModel');
 const AppFeatures = require('../utils/AppFeatures');
 
+exports.getTopCheapTours = (req, res, next) =>{
+
+    req.query.sort = '-ratingsAverage,price';
+    req.query.fields = 'name,price,ratingsAverage,difficulty';
+    req.query.limit = '5';
+    next();
+}
 exports.getAllTours = async (req, res) => {
     try {
+        
         const features = new AppFeatures(Tour.find(), req.query)
             .filter()
             .sort()
