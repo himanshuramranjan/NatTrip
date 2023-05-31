@@ -51,6 +51,10 @@ const tourSchema = new mongoose.Schema({
         default: Date.now(),
         select: false
     },
+    privateTour: {
+        type: Boolean,
+        default: false
+    },
     startDates: [Date]
 }, {
     toJSON: { virtuals: true},
@@ -59,11 +63,17 @@ const tourSchema = new mongoose.Schema({
 
 // virutal field to show duration of tour in weeks
 tourSchema.virtual('durationWeeks').get(function() {
-    
+
     if(!this.duration) return;
 
     let durationInWeeks = (this.duration / 7) * 100;
     return Math.round(durationInWeeks) / 100;
+});
+
+// pre-find (query) hook to hide private tours
+tourSchema.pre(/^find/, function(next) {
+    this.find({ privateTour: { $ne: true }});
+    next();
 })
 
 const Tour = mongoose.model('Tour', tourSchema);
