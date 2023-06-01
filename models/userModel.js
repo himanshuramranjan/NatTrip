@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, 'Please provide your email'],
-        unique: true,
+        unique: [true, 'An account exist w/ same Email Id'],
         lowercase: true,
         validate: [validator.isEmail, 'Please provide valid mail ID']
     },
