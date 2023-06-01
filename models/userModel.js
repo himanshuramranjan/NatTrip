@@ -13,6 +13,11 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         validate: [validator.isEmail, 'Please provide valid mail ID']
     },
+    role: {
+        type: String,
+        enum: ['admin', 'user', 'guide'],
+        default: 'user'
+    },
     photo: String,
     password: {
         type: String,
@@ -21,7 +26,20 @@ const userSchema = new mongoose.Schema({
     },
     confirmPassword: {
         type: String,
-        required: [true, 'Please provide password']
+        required: [true, 'Please provide password'],
+        validator: {
+            validate: function(confirmPswd) {
+                return this.password === confirmPswd;
+            },
+            message: 'Passwords are not matching'
+        }
+    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    active: {
+        type: Boolean,
+        default: true
     }
 });
 
