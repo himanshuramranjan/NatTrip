@@ -52,9 +52,14 @@ userSchema.pre('save', async function(next) {
 
     this.password = await bcrypt.hash(this.password, 12);
     this.confirmPassword = undefined;
-    
+
     next();
-})
+});
+
+// compares the actual password with user's provided password
+userSchema.methods.isCorrectPassword = async function(candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+}
 
 const User = mongoose.model('User', userSchema);
 
