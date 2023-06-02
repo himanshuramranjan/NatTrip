@@ -26,6 +26,7 @@ const sendJWTToken = (res, user, statusCode) => {
     });
 }
 
+// Signs up a new user
 exports.signup = catchAsyncError(async (req, res, next) => {
     
     const user = await User.create(req.body); //[restrict role in pre save middleware]
