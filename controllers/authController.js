@@ -12,6 +12,7 @@ const signInToken = id => {
     });
 }
 
+// Creates signOut token using jwt
 const signOutToken = id => {
     return jwt.sign({id: id}, process.env.JWT_SECRET_KEY, {
         expiresIn: '10s'
@@ -105,4 +106,4 @@ exports.protectRoute = catchAsyncError(async (req, res, next) => {
     // pass the existing user to the req
     req.user = existingUser;
     next();
-})
+});
