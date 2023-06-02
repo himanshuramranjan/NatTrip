@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -72,6 +74,14 @@ userSchema.methods.isPasswordChanged = function(JWTTimeStamp) {
 
     return passwordChangedAtTimeStamp > JWTTimeStamp;
 }
+
+// create reset token
+userSchema.methods.createPasswordResetToken = function() {
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    return resetToken; 
+ }
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

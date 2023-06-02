@@ -1,4 +1,6 @@
 const { promisify } = require('util');
+const crypto = require('crypto');
+
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/userModel');
@@ -17,6 +19,13 @@ const signOutToken = id => {
     return jwt.sign({id: id}, process.env.JWT_SECRET_KEY, {
         expiresIn: '10s'
     });
+}
+
+const encryptToken = token => {
+    return crypto
+        .createHash('sha256')
+        .update(token)
+        .digest('hex');
 }
 
 // Send jwt token after its creation
@@ -127,14 +136,40 @@ exports.restrictRoute = (...roles) => {
     }
 }
 
-// Reset the password based on token sent to email
-exports.resetToken = catchAsyncError(async (req, res, next) => {
+// Create token if user forgot thier password
+exports.forgotPassword = catchAsyncError(async (req, res, next) => {
+
+    // get the user based on mail ID
+    const user = await User.findOne({email: req.body.email});
+
+    // if no user exist
+    if(!user) {
+        return next(new AppError('No user exist with given mail ID', 404));
+    }
+
+    // create reset token
+    let resetToken = user.createPasswordResetToken();
 
     // encrypt the token
-    const hashedToken = crypto
-        .createHash('sha256')
-        .update(req.params.token)
-        .digest('hex');
+    const hashedToken = encryptToken(resetToken);
+    
+    // save the token and set its expiry
+    user.passwordResetToken = hashedToken;
+    user.passwordResetExpires = Date.now() + (10 * 60 * 1000);
+
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        status: 'success',
+        resetToken
+    });
+})
+
+// Reset the password based on token sent to email
+exports.resetPassword = catchAsyncError(async (req, res, next) => {
+
+    // encrypt the token
+    const hashedToken = encryptToken(req.params.token);
 
     // find the user based on token
     const user = await User.findOne({
