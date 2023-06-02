@@ -78,7 +78,7 @@ exports.logout = catchAsyncError(async (req, res, next) => {
     })
 });
 
-// protect routes from un-authenticated req
+// Protect routes from un-authenticated req
 exports.protectRoute = catchAsyncError(async (req, res, next) => {
 
     // checks for jwt token
@@ -107,3 +107,15 @@ exports.protectRoute = catchAsyncError(async (req, res, next) => {
     req.user = existingUser;
     next();
 });
+
+// Protect routes from un-authorized req
+exports.restrictRoute = (...roles) => {
+    return (req, res, next) => {
+
+        // checks if req has roles for the action
+        if(!roles.includes(req.user.role)) {
+            return next(new AppError('You are not authorized for this action', 403));
+        }
+        next();
+    }
+}
