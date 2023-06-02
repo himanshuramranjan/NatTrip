@@ -40,6 +40,7 @@ const sendJWTToken = (res, user, statusCode) => {
 // Signs up a new user
 exports.signup = catchAsyncError(async (req, res, next) => {
     
+    // providing the fields to prevent admin access to users
     const user = await User.create({
         name: req.body.name,
         email: req.body.email,
