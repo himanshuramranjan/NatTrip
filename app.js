@@ -1,6 +1,7 @@
 const express = require('express');
 
 const tourRouter = require('./routes/tourRoutes');
+const userRouter = require('./routes/userRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/AppError');
 
@@ -11,7 +12,8 @@ const app = express();
 app.use(express.json({ limit: '10kb' }));
 
 // Routes
-app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/nattrip/tours', tourRouter);
+app.use('/api/v1/nattrip/users', userRouter);
 
 // Handle any undefined routes
 app.all('*', (req, res, next) => {
