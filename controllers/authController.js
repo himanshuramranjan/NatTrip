@@ -147,7 +147,7 @@ exports.resetToken = catchAsyncError(async (req, res, next) => {
         return next(new AppError('Token is invalid or expired', 400));
     }
 
-    // update the fields
+    // update the user fields
     user.password = req.body.password;
     user.confirmPassword = req.body.password;
     user.passwordResetExpires = undefined;
@@ -160,5 +160,20 @@ exports.resetToken = catchAsyncError(async (req, res, next) => {
 
 // Update password for LoggedIn users
 exports.updatePassword = catchAsyncError(async (req, res, next) => {
-    
+
+    // get the user based on Id
+    const user = await User.findById(req.user.id).select('+password');
+
+    // check for current password
+    if(!req.body.currentPassword || !(await user.isCorrectPassword(req.body.currentPassword, user.password))) {
+        return next(new AppError('Current password is not matching', 401));
+    }
+
+    // update the user password
+    user.password = req.body.password;
+    user.confirmPassword = req.body.confirmPassword;
+
+    await user.save();
+
+    sendJWTToken(res, user, 200);
 })
