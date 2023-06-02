@@ -126,3 +126,39 @@ exports.restrictRoute = (...roles) => {
         next();
     }
 }
+
+// Reset the password based on token sent to email
+exports.resetToken = catchAsyncError(async (req, res, next) => {
+
+    // encrypt the token
+    const hashedToken = crypto
+        .createHash('sha256')
+        .update(req.params.token)
+        .digest('hex');
+
+    // find the user based on token
+    const user = await User.findOne({
+        passwordResetToken: hashedToken,
+        passwordResetExpires: { $gt: Date.now() }
+    });
+
+    // check if token is valid
+    if(!user) {
+        return next(new AppError('Token is invalid or expired', 400));
+    }
+
+    // update the fields
+    user.password = req.body.password;
+    user.confirmPassword = req.body.password;
+    user.passwordResetExpires = undefined;
+    user.passwordResetToken = undefined;
+
+    await user.save();
+
+    sendJWTToken(res, user, 200);
+});
+
+// Update password for LoggedIn users
+exports.updatePassword = catchAsyncError(async (req, res, next) => {
+    
+})
