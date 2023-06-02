@@ -13,6 +13,9 @@ const sendJWTToken = (res, user, statusCode) => {
 
     const token = signInToken(user._id);
 
+    user.password = undefined;
+    user.active = undefined;
+    
     res.status(statusCode).json({
         status: 'success',
         token,
