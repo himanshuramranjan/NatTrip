@@ -75,3 +75,33 @@ exports.logout = catchAsyncError(async (req, res, next) => {
         token
     })
 });
+
+// protect routes from un-authenticated req
+exports.protectRoute = catchAsyncError(async (req, res, next) => {
+
+    // checks for jwt token
+    if(!req.headers.authorization || !req.headers.authorization.startsWith('Bearer')) {
+        return next(new AppError('You are not logged in', 401));
+    }
+
+    // decode the jwt token to get the userId
+    let token = req.headers.authorization.split(' ')[1];
+    const decodedToken = await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY);
+
+    // check for existing user
+    const existingUser = await User.findById(decodedToken.id);
+
+    // if no user exist w/ given id
+    if(!existingUser) {
+        return next(new AppError('The user no longer exist', 401))
+    }
+
+    // check if user has changed its password
+    if(existingUser.isPasswordChanged(decodedToken.iat)) {
+        return next(new AppError('You changed your password ! Please login again', 401));
+    }
+
+    // pass the existing user to the req
+    req.user = existingUser;
+    next();
+})
