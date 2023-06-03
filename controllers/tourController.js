@@ -1,6 +1,7 @@
 const Tour = require("../models/tourModel");
 const AppFeatures = require("../utils/AppFeatures");
 const catchAsyncError = require("../utils/catchAsyncError");
+const commonController = require('./commonController');
 
 // Get top cheap tours
 exports.getTopCheapTours = (req, res, next) => {
@@ -13,75 +14,19 @@ exports.getTopCheapTours = (req, res, next) => {
 };
 
 // Get all the tour details
-exports.getAllTours = catchAsyncError(async (req, res, next) => {
-
-  const features = new AppFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-
-  const tours = await features.query;
-
-  return res.status(200).json({
-    status: "success",
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
+exports.getAllTours = commonController.getAll(Tour);
 
 // Get a given tour detail
-exports.getTour = catchAsyncError(async (req, res, next) => {
-
-  const tour = await Tour.find(req.params.id);
-
-  return res.status(200).json({
-    status: "success",
-    data: {
-      tour,
-    },
-  });
-});
+exports.getTour = commonController.getOne(Tour);
 
 // Create a new tour
-exports.createTour = catchAsyncError(async (req, res,next) => {
-
-  const tour = await Tour.create(req.body);
-
-  return res.status(200).json({
-    status: "success",
-    data: {
-      tour,
-    },
-  });
-});
+exports.createTour = commonController.createOne(Tour);
 
 // Update a new tour
-exports.updateTour = catchAsyncError(async (req, res, next) => {
-
-  const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
-  return res.status(201).json({
-    status: "success",
-    data: {
-      tour,
-    },
-  });
-});
+exports.updateTour = commonController.updateOne(Tour);
 
 // Delete a tour
-exports.deleteTour = catchAsyncError(async (req, res, next) => {
-  await Tour.findByIdAndDelete(req.params.id);
-
-  return res.status(201).json({
-    status: "success",
-  });
-});
+exports.deleteTour = commonController.deleteOne(Tour);
 
 // Get tour stats based on difficulty
 exports.getTourStats = catchAsyncError(async (req, res, next) => {
