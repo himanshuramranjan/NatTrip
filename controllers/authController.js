@@ -7,24 +7,10 @@ const User = require('../models/userModel');
 const catchAsyncError = require('../utils/catchAsyncError');
 const AppError = require('../utils/AppError');
 
-// Creates signIn token using jwt
-const signInToken = id => {
-    return jwt.sign({id: id}, process.env.JWT_SECRET_KEY, {
-        expiresIn: process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000
-    });
-}
-
-// Creates signOut token using jwt
-const signOutToken = id => {
-    return jwt.sign({id: id}, process.env.JWT_SECRET_KEY, {
-        expiresIn: '10s'
-    });
-}
-
 // Send jwt token after its creation
 const sendJWTToken = (res, user, statusCode) => {
 
-    const token = signInToken(user._id);
+    const token = user.signInToken(user._id);
 
     // hides the password and active field on signup
     user.password = undefined;
@@ -79,7 +65,7 @@ exports.login = catchAsyncError(async (req, res, next) => {
 // Log out the user
 exports.logout = catchAsyncError(async (req, res, next) => {
 
-    const token = signOutToken(req.user._id);
+    const token = req.user.signOutToken(req.user._id);
 
     res.status(200).json({
         status: 'success',

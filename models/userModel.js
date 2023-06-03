@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
@@ -89,6 +90,20 @@ userSchema.methods.encryptToken = token => {
         .createHash('sha256')
         .update(token)
         .digest('hex');
+}
+
+// Creates signIn token using jwt
+userSchema.methods.signInToken = id => {
+    return jwt.sign({id: id}, process.env.JWT_SECRET_KEY, {
+        expiresIn: process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000
+    });
+}
+
+// Creates signOut token using jwt
+userSchema.methods.signOutToken = id => {
+    return jwt.sign({id: id}, process.env.JWT_SECRET_KEY, {
+        expiresIn: '10s'
+    });
 }
 const User = mongoose.model('User', userSchema);
 
