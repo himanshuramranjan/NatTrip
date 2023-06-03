@@ -59,6 +59,12 @@ userSchema.pre('save', async function(next) {
     next();
 });
 
+// pre-find (query) hook to hide deactivated users
+userSchema.pre(/^find/, function(next) {
+    this.find({ active: { $ne: false }});
+    next();
+});
+
 // compares the actual password with user's provided password
 userSchema.methods.isCorrectPassword = async function(candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);

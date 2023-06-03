@@ -26,7 +26,7 @@ exports.getAll = Model => catchAsyncError(async (req, res, next) => {
 // Get a single doc
 exports.getOne = Model => catchAsyncError(async (req, res, next) => {
 
-    const doc = await Model.find(req.params.id);
+    const doc = await Model.find({_id: req.params.id});
 
     if(!doc) {
         return next(new AppError(`No doc w/ Id: ${req.params.id} exist`, 404));

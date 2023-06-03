@@ -30,13 +30,7 @@ exports.createUser = (req, res, next) => {
 }
 
 // Update a new user
-exports.updateUser = (req, res, next) => {
-
-    res.status(500).json({
-        status: 'error',
-        message: 'Route not defined ! Only User can modify its data'
-    });
-}
+exports.updateUser = commonController.updateOne(User);
 
 // Delete a user
 exports.deleteUser = commonController.deleteOne(User);
@@ -44,7 +38,7 @@ exports.deleteUser = commonController.deleteOne(User);
 // Add logged in user id to the params
 exports.getMe = (req, res, next) => {
 
-    req.params.id = req.user.id;
+    req.params.id = req.user._id;
     next();
 }
 
@@ -56,15 +50,18 @@ exports.updateMe = (req, res, next) => {
     }
 
     req.body = filterObj(req.body, 'name', 'photo');
-    req.params.id = req.user.id;
+    req.params.id = req.user._id;
 
     next();
 }
 
-exports.deleteMe = (req, res, next) => {
+// Deactivates the users' account by
+exports.deleteMe = catchAsyncError(async (req, res, next) => {
 
-    req.body = { active: false};
-    req.params.id = req.user.id;
+    const doc = await User.findByIdAndUpdate(req.user._id, { active: false});
 
-    next();
-}
+    res.status(200).json({
+        status: 'success',
+        message: 'Your account has been deactivated'
+    });
+});
