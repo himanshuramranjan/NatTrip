@@ -21,13 +21,6 @@ const signOutToken = id => {
     });
 }
 
-const encryptToken = token => {
-    return crypto
-        .createHash('sha256')
-        .update(token)
-        .digest('hex');
-}
-
 // Send jwt token after its creation
 const sendJWTToken = (res, user, statusCode) => {
 
@@ -151,7 +144,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     let resetToken = user.createPasswordResetToken();
 
     // encrypt the token
-    const hashedToken = encryptToken(resetToken);
+    const hashedToken = user.encryptToken(resetToken);
     
     // save the token and set its expiry
     user.passwordResetToken = hashedToken;
@@ -169,10 +162,11 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
     // encrypt the token
-    const hashedToken = encryptToken(req.params.token);
+    let user = new User();
+    const hashedToken = user.encryptToken(req.params.token);
 
     // find the user based on token
-    const user = await User.findOne({
+    user = await User.findOne({
         passwordResetToken: hashedToken,
         passwordResetExpires: { $gt: Date.now() }
     });

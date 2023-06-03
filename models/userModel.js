@@ -82,6 +82,14 @@ userSchema.methods.createPasswordResetToken = function() {
 
     return resetToken; 
  }
+
+// encrypt the reset password token
+userSchema.methods.encryptToken = token => {
+    return crypto
+        .createHash('sha256')
+        .update(token)
+        .digest('hex');
+}
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
