@@ -19,9 +19,19 @@ router.delete('/deleteMe', userController.deleteMe);
 router.patch('/updatePassword', authController.updatePassword);
 router.post('/logout', authController.logout);
 
+// Protects all the below routes from un-authorized req
+router.use(authController.restrictRoute('admin'));
 
-router.route('/').get(userController.getAllUsers);
-router.route('/:id').get(authController.protectRoute, authController.restrictRoute('user'), userController.getUser);
+// Admin accessible routes
+router
+    .route('/')
+    .get(userController.getAllUsers)
+    .post(userController.createUser);
 
+router
+    .route('/:id')
+    .get(userController.getUser)
+    .delete(userController.deleteUser)
+    .patch(authController.restrictRoute('user'), userController.updateUser);
 
 module.exports = router;
