@@ -72,7 +72,13 @@ const tourSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    startDates: [Date]
+    startDates: [Date],
+    guides: [ 
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        }
+    ]
 }, {
     toJSON: { virtuals: true},
     toObject: { virtuals :true}
@@ -90,6 +96,15 @@ tourSchema.virtual('durationWeeks').get(function() {
 // pre-find (query) hook to hide private tours
 tourSchema.pre(/^find/, function(next) {
     this.find({ privateTour: { $ne: true }});
+    next();
+});
+
+// populate the guide details for the tour
+tourSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: 'guides',
+        select: 'name photo'
+    });
     next();
 });
 
