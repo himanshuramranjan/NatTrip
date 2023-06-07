@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/userModel');
+const Review = require('../models/reviewModel');
 const catchAsyncError = require('../utils/catchAsyncError');
 const AppError = require('../utils/AppError');
 
@@ -210,3 +211,15 @@ exports.updatePassword = catchAsyncError(async (req, res, next) => {
 
     sendJWTToken(res, user, 200);
 })
+
+// validate the owner of reviews
+exports.validateOwner = catchAsyncError(async (req, res, next) => {
+    
+    const review = await Review.findById(req.params.id);
+    
+    // check if current user is the owner of the review
+    if(!review.user._id.equals(req.user.id)) {
+        return next(new AppError('You are not authorized to modify this post', 403));
+    }
+    next();
+});
