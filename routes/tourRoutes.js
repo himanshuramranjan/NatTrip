@@ -6,20 +6,14 @@ const router = express.Router();
 
 router.use('/:tourId/reviews', reviewRouter);
 
-router
-    .route('/top-cheap-tours')
-    .get(
-        tourController.getTopCheapTours, 
-        tourController.getAllTours
-    );
+router.get('/top-cheap-tours',
+            tourController.getTopCheapTours, 
+            tourController.getAllTours
+        );
 
-router
-    .route('/tours-stats')
-    .get(tourController.getTourStats); 
+router.get('/tours-stats', tourController.getTourStats); 
 
-router
-    .route('/monthly-tour-plans/:year')
-    .get(tourController.getMonthlyTourPlans);
+router.get('/monthly-tour-plans/:year', tourController.getMonthlyTourPlans);
 
 router
     .route('/')
