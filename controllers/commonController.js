@@ -7,7 +7,8 @@ const { populate } = require('../models/tourModel');
 exports.getAll = Model => catchAsyncError(async (req, res, next) => {
 
     let filter = {};
-
+    
+    // filter out the given tour if Id is present
     if(req.params.tourId) filter = { tour: req.params.tourId };
 
     // apply the features for desired o/p
