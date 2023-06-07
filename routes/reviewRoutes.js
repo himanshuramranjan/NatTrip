@@ -8,7 +8,7 @@ const router = express.Router({ mergeParams: true });
 router
     .route('/')
     .get(reviewController.getAllReviews)
-    .post(authController.protectRoute, userController.getMe, reviewController.createReview);
+    .post(authController.protectRoute, reviewController.getUserAndTourId, reviewController.createReview);
 
 module.exports = router;
 
