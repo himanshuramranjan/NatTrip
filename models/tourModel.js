@@ -93,6 +93,13 @@ tourSchema.virtual('durationWeeks').get(function() {
     return Math.round(durationInWeeks) / 100;
 });
 
+// virutal populate for reviews
+tourSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'tour',
+    localField: '_id'
+});
+
 // pre-find (query) hook to hide private tours
 tourSchema.pre(/^find/, function(next) {
     this.find({ privateTour: { $ne: true }});

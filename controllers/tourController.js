@@ -17,7 +17,7 @@ exports.getTopCheapTours = (req, res, next) => {
 exports.getAllTours = commonController.getAll(Tour);
 
 // Get a given tour detail
-exports.getTour = commonController.getOne(Tour);
+exports.getTour = commonController.getOne(Tour, 'reviews');
 
 // Create a new tour
 exports.createTour = commonController.createOne(Tour);

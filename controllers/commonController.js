@@ -1,6 +1,7 @@
 const catchAsyncError = require('../utils/catchAsyncError');
 const AppError = require('../utils/AppError');
 const AppFeatures = require('../utils/AppFeatures');
+const { populate } = require('../models/tourModel');
 
 // Get All the docs
 exports.getAll = Model => catchAsyncError(async (req, res, next) => {
@@ -24,9 +25,14 @@ exports.getAll = Model => catchAsyncError(async (req, res, next) => {
 });
 
 // Get a single doc
-exports.getOne = Model => catchAsyncError(async (req, res, next) => {
+exports.getOne = (Model, populateOption) => catchAsyncError(async (req, res, next) => {
 
-    const doc = await Model.findById({_id: req.params.id});
+    let query = Model.findById(req.params.id);
+
+    // check if virutal field need to be populated
+    if(populateOption) query.populate(populateOption);
+
+    const doc = await query;
 
     if(!doc) {
         return next(new AppError(`No doc w/ Id: ${req.params.id} exist`, 404));
