@@ -6,8 +6,12 @@ const { populate } = require('../models/tourModel');
 // Get All the docs
 exports.getAll = Model => catchAsyncError(async (req, res, next) => {
 
+    let filter = {};
+
+    if(req.params.tourId) filter = { tour: req.params.tourId };
+
     // apply the features for desired o/p
-    const features = new AppFeatures(Model.find(), req.query)
+    const features = new AppFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
       .limitFields()
