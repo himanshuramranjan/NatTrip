@@ -73,9 +73,13 @@ exports.updateOne = Model => catchAsyncError(async (req, res, next) => {
     });
   });
 
-  // delete the doc
+// delete the doc
 exports.deleteOne = Model => catchAsyncError(async (req, res, next) => {
-    await Model.findByIdAndDelete(req.params.id);
+    const doc = await Model.findByIdAndDelete(req.params.id);
+
+    if(!doc) {
+      return next(new AppError(`No doc w/ Id: ${req.params.id} exist`, 404));
+    }
   
     res.status(201).json({
       status: "success",
