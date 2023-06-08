@@ -213,13 +213,17 @@ exports.updatePassword = catchAsyncError(async (req, res, next) => {
 })
 
 // validate the owner of reviews
-exports.validateOwner = catchAsyncError(async (req, res, next) => {
+exports.validateOwner = Model => catchAsyncError(async (req, res, next) => {
     
-    const review = await Review.findById(req.params.id);
+    const doc = await Model.findById(req.params.id);
+
+    if(!doc) {
+        return next(new AppError(`No doc w/ Id: ${req.params.id} exist`, 404));
+    }
     
-    // check if current user is the owner of the review
-    if(!review.user._id.equals(req.user.id)) {
-        return next(new AppError('You are not authorized to modify this post', 403));
+    // check if current user is the owner of the review/booking
+    if(!doc.user._id.equals(req.user.id)) {
+        return next(new AppError('You are not authorized to access this doc', 403));
     }
     next();
 });

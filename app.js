@@ -3,6 +3,7 @@ const express = require('express');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/AppError');
 
@@ -16,6 +17,7 @@ app.use(express.json({ limit: '10kb' }));
 app.use('/api/v1/nattrip/tours', tourRouter);
 app.use('/api/v1/nattrip/users', userRouter);
 app.use('/api/v1/nattrip/reviews', reviewRouter);
+app.use('/api/v1/nattrip/bookings', bookingRouter);
 
 // Handle any undefined routes
 app.all('*', (req, res, next) => {
