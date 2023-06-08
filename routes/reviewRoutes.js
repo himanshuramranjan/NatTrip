@@ -1,5 +1,6 @@
 const express = require('express');
 
+const Review = require('../models/reviewModel');
 const authController = require('../controllers/authController');
 const reviewController = require('../controllers/reviewController');
 const userController = require('../controllers/userController');
@@ -20,8 +21,8 @@ router.use(authController.protectRoute);
 router
     .route('/:id')
     .get(reviewController.getReview)
-    .patch(authController.validateOwner, reviewController.updateReview)
-    .delete(authController.validateOwner, reviewController.deleteReview);
+    .patch(authController.validateOwner(Review), reviewController.updateReview)
+    .delete(authController.validateOwner(Review), reviewController.deleteReview);
 
 module.exports = router;
 
