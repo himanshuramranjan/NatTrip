@@ -31,6 +31,9 @@ const reviewSchema = new mongoose.Schema({
     toObject: { virtuals :true}
 });
 
+// index to restrict 1 review from each user
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 // populate user detail on reviews
 reviewSchema.pre(/^find/, function(next) {
 
