@@ -10,10 +10,7 @@ const router = express.Router();
 router.use('/:tourId/reviews', reviewRouter);
 router.use('/:tourId/bookings', bookingRouter);
 
-router
-    .route('/')
-    .get(tourController.getAllTours)
-    .post(authController.restrictRoute('guide'), tourController.createTour);
+router.get('/', tourController.getAllTours);
 
 // Protects all the following routes from un-authenticated req
 router.use(authController.protectRoute);
@@ -23,12 +20,12 @@ router.get('/top-cheap-tours',
             tourController.getAllTours
         );
 
-router 
-    .route('/:id')
-    .get(tourController.getTour);
+router.get('/:id', tourController.getTour);
 
 // Protects all the below routes from un-authorized req
 router.use(authController.restrictRoute('guide', 'admin'));
+
+router.post('/', tourController.createTour);
 
 router 
     .route('/:id')
