@@ -3,7 +3,6 @@ const express = require('express');
 const Review = require('../models/reviewModel');
 const authController = require('../controllers/authController');
 const reviewController = require('../controllers/reviewController');
-const userController = require('../controllers/userController');
 const router = express.Router({ mergeParams: true });
 
 router
@@ -16,6 +15,7 @@ router
         reviewController.createReview
         );
 
+// Protects all the following routes from un-authenticated req
 router.use(authController.protectRoute);
 
 router
