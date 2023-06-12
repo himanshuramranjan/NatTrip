@@ -14,6 +14,7 @@ router
         bookingController.createBooking
     );
 
+// Protects all the following routes from un-authenticated req
 router.use(authController.protectRoute);
 
 router
