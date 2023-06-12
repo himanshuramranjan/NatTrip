@@ -2,7 +2,6 @@ const express = require('express');
 const Booking = require('../models/bookingModel');
 const authController = require('../controllers/authController');
 const bookingController = require('../controllers/bookingController');
-const commonController = require('../controllers/commonController');
 
 const router = express.Router({ mergeParams: true });
 
