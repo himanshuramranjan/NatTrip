@@ -183,7 +183,7 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
     // update the user fields
     user.password = req.body.password;
-    user.confirmPassword = req.body.password;
+    user.confirmPassword = req.body.confirmPassword;
     user.passwordResetExpires = undefined;
     user.passwordResetToken = undefined;
 
