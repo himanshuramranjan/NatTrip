@@ -20,19 +20,18 @@ router.get('/top-cheap-tours',
             tourController.getAllTours
         );
 
-router.get('/:id', tourController.getTour);
-
 // Protects all the below routes from un-authorized req
 router.use(authController.restrictRoute('guide', 'admin'));
 
 router.post('/', tourController.createTour);
 
-router 
-    .route('/:id')
-    .patch(tourController.updateTour)
-    .delete(tourController.deleteTour);
-
 router.get('/tours-stats', tourController.getTourStats); 
 router.get('/monthly-tour-plans/:year', tourController.getMonthlyTourPlans);
+
+router 
+    .route('/:id')
+    .get(tourController.getTour)
+    .patch(tourController.updateTour)
+    .delete(tourController.deleteTour);
 
 module.exports = router;
