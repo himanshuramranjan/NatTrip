@@ -20,7 +20,7 @@ exports.getAllUsers = commonController.getAll(User);
 // Get a given user detail
 exports.getUser = commonController.getOne(User);
 
-// Create a new user
+// Create a new user (NOT DEFINED)
 exports.createUser = (req, res, next) => {
 
     res.status(500).json({
@@ -29,7 +29,7 @@ exports.createUser = (req, res, next) => {
     });
 }
 
-// Update a new user
+// Update a new user (NOT DEFINED)
 exports.updateUser = (req, res, next) => {
 
     res.status(500).json({
