@@ -30,7 +30,13 @@ exports.createUser = (req, res, next) => {
 }
 
 // Update a new user
-exports.updateUser = commonController.updateOne(User);
+exports.updateUser = (req, res, next) => {
+
+    res.status(500).json({
+        status: 'error',
+        message: 'Route not defined !'
+    });
+}
 
 // Delete a user
 exports.deleteUser = commonController.deleteOne(User);
