@@ -5,17 +5,17 @@ const bookingController = require('../controllers/bookingController');
 
 const router = express.Router({ mergeParams: true });
 
+// Protects all the following routes from un-authenticated req
+router.use(authController.protectRoute);
+
 router
     .route('/')
-    .get(bookingController.getAllBookings)
+    .get(authController.restrictRoute('admin'), bookingController.getAllBookings)
     .post(authController.protectRoute, 
         authController.restrictRoute('user'), 
         bookingController.setTripAndUser, 
         bookingController.createBooking
     );
-
-// Protects all the following routes from un-authenticated req
-router.use(authController.protectRoute);
 
 router
     .route('/:id')
