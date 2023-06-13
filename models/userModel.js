@@ -32,8 +32,8 @@ const userSchema = new mongoose.Schema({
     confirmPassword: {
         type: String,
         required: [true, 'Please provide password'],
-        validator: {
-            validate: function(confirmPswd) {
+        validate: {
+            validator: function(confirmPswd) {
                 return this.password === confirmPswd;
             },
             message: 'Passwords are not matching'
