@@ -96,7 +96,7 @@ This Node.js project is a booking application that allows users to explore and b
 - **Bookings**: `/api/v1/nattrip/bookings`
   - `GET /` - Get all bookings (admin-only).
   - `POST /` - Create a new booking (user-only).
-  - `GET /:id - Get a specific booking.
+  - `GET /:id` - Get a specific booking.
   - `PATCH /:id` - Update a specific booking.
   - `DELETE /:id` - Delete a specific booking.
 
