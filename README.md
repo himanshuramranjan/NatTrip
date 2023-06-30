@@ -39,6 +39,9 @@ This Node.js project is a booking application that allows users to explore and b
    ```plaintext
    DATABASE=<your_database_connection_string>
    PASSWORD=<your_database_password>
+   JWT_SECRET_KEY=<your_jwt_secret_key>
+   JWT_EXPIRES_IN=<your_jwt_expiration_day>
+   JWT_COOKIE_EXPIRES_IN=<your_jwt_cookie_expiration_day>
    ```
 
 ### Usage
