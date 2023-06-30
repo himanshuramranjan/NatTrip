@@ -46,7 +46,7 @@ This Node.js project is a booking application that allows users to explore and b
 1. Start the server:
 
    ```shell
-   npm start
+   nodemon server.js
    ```
 
 2. Access the application through the following URL:
