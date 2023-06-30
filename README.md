@@ -1,4 +1,4 @@
-## Project Name: NatTrip
+## NatTrip
 
 The "NatTrip" project is an application that allows users to explore and book nature trips and tours. It provides a platform where users can discover various natural destinations, view tour details, read reviews, make bookings, and manage their bookings. The project aims to connect nature enthusiasts with tour providers and create a seamless booking experience for users.
 The application is built using Node.js and Express.js on the backend, with MongoDB as the database. It follows a RESTful API architecture and utilizes various technologies and libraries such as Mongoose for database modeling, bcryptjs for password encryption, JWT for authentication, and dotenv for environment variable management.
