@@ -90,7 +90,7 @@ userSchema.methods.createPasswordResetToken = function() {
     return resetToken; 
  }
 
-// encrypt the reset password token
+// encrypt the password token
 userSchema.methods.encryptToken = token => {
     return crypto
         .createHash('sha256')
