@@ -49,17 +49,26 @@ exports.getMe = (req, res, next) => {
 }
 
 // Filter out fields and add Id to the req
-exports.updateMe = (req, res, next) => {
+exports.updateMe = catchAsyncError(async (req, res, next) => {
     
     if(req.body.password) {
         return next(new AppError('This route is not for updating password', 400));
     }
 
     req.body = filterObj(req.body, 'name', 'photo');
-    req.params.id = req.user._id;
 
-    next();
-}
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
+        new: true,
+        runValidators: true,
+      });
+    
+      res.status(200).json({
+        status: "success",
+        data: {
+          user: updatedUser,
+        },
+      });
+});
 
 // Deactivates the users' account by
 exports.deleteMe = catchAsyncError(async (req, res, next) => {

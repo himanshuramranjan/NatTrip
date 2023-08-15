@@ -163,7 +163,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     });
 })
 
-// Reset the password based on token sent to email
+// Reset the password based on token (sent to email)
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
     // encrypt the token

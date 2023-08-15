@@ -14,7 +14,7 @@ router.use(authController.protectRoute);
 
 // User accessible routes
 router.get('/me', userController.getMe, userController.getUser);
-router.patch('/updateMe', userController.updateMe, userController.updateUser);
+router.patch('/updateMe', userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 router.patch('/updatePassword', authController.updatePassword);
 router.post('/logout', authController.logout);
